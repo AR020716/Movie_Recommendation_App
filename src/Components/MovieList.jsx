@@ -8,10 +8,19 @@ function MovieList({ genreId }) {
     const [movieList, setMovieList] = useState([]);
 
     const getMovieListByGenreId = React.useCallback(() => {
-        GlobalApi.getMoviesByGenreID(genreId).then((resp) => {
-            console.log(resp.data.results);
-            setMovieList(resp.data.results);
-        });
+        GlobalApi.getMoviesByGenreID(genreId)
+            .then((resp) => {
+                console.log('API Response:', resp.data);
+                if (resp.data && resp.data.results) {
+                    setMovieList(resp.data.results);
+                } else {
+                    console.error('No results in API response');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching movies:', error);
+                setMovieList([]);
+            });
     }, [genreId]);
 
     useEffect(() => {
